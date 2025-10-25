@@ -17,9 +17,6 @@ Route::get('/admin/posts/{post}/edit', [PostController::class, 'edit'])->name('p
 Route::post('/admin/posts/{post}', [PostController::class, 'update'])->name('posts.update');
 Route::post('/admin/posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -38,20 +38,27 @@
                 </div>
             </form>
 
-            <!-- Buttons row: Save (submits profile form) + Logout (separate POST form). kept side-by-side -->
             <div class="mt-4 flex items-center gap-6">
-                <!-- Save button targets the profile form by id (avoids nested forms) -->
                 <button type="submit" form="profile-update-form" class="btn btn-primary">
                     {{ __('Save') }}
                 </button>
 
-                <!-- Logout remains a real POST form (sibling) but visually inline -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-ghost normal-case p-0">
                         {{ __('Logout') }}
                     </button>
                 </form>
+            </div>
+
+            <!-- Password change -->
+            <div class="mt-8">
+                @include('profile.partials.update-password-form')
+            </div>
+
+            <!-- Account deletion -->
+            <div class="mt-6">
+                @include('profile.partials.delete-user-form')
             </div>
         </div>
     </div>

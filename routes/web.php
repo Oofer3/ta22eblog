@@ -3,6 +3,7 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', 'PublicController@index');
@@ -17,6 +18,9 @@ Route::get('/admin/posts/{post}/edit', [PostController::class, 'edit'])->name('p
 Route::post('/admin/posts/{post}', [PostController::class, 'update'])->name('posts.update');
 Route::post('/admin/posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])
+    ->name('comments.store')
+    ->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

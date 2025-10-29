@@ -29,7 +29,8 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        //
+        // allow only authenticated users to create comments
+        return $user !== null;
     }
 
     /**

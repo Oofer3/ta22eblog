@@ -2,65 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
-use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Store a new comment for a post.
      */
-    public function index()
+    public function store(StoreCommentRequest $request, Post $post): RedirectResponse
     {
-        //
-    }
+        $data = $request->validated();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        // ensure user_id is set
+        $data['user_id'] = $request->user()->id;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCommentRequest $request)
-    {
-        //
-    }
+        // create comment related to the post
+        $post->comments()->create($data);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCommentRequest $request, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Comment $comment)
-    {
-        //
+        return back()->with('status', 'comment-added');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request; // <-- add this line
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -29,15 +30,20 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        $post = new Post($request->validated());
-        if($request->has('image')){
-            $post->image = $request->file('image')->store('', ['disk'=>'public']);
-        }
-        // $post->title = $request->input('title');
-        // $post->body = $request->input('body');
-        $post->save();
+        // validate or use your StorePostRequest
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'body'  => 'required|string',
+            // ...other rules...
+        ]);
+
+        // set user_id explicitly so DB constraint is satisfied
+        $data['user_id'] = $request->user()->id;
+
+        \App\Models\Post::create($data);
+
         return redirect()->route('posts.index');
     }
 

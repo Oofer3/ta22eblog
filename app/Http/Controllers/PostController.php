@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request; // <-- add this line
+use Illuminate\Http\RedirectResponse;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -30,21 +31,25 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        // validate or use your StorePostRequest
+        // If user is not authenticated, redirect to login with a message
+        if (! $request->user()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a post.');
+        }
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'body'  => 'required|string',
             // ...other rules...
         ]);
 
-        // set user_id explicitly so DB constraint is satisfied
+        // ensure the post is associated with the authenticated user
         $data['user_id'] = $request->user()->id;
 
-        \App\Models\Post::create($data);
+        Post::create($data);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('home')->with('status', 'Post created.');
     }
 
     /**

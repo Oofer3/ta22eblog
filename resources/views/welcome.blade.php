@@ -5,9 +5,11 @@
         <div class="my-2 text-center">
         {{ $posts->links() }}
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="flex flex-col gap-6">
             @foreach ($posts as $post)
-                @include('partials.post-card')
+                <div class="w-full">
+                    @include('partials.post-card')
+                </div>
             @endforeach
         </div>
     </div>
